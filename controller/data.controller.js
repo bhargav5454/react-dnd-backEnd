@@ -59,4 +59,17 @@ const addNewColumn = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-module.exports = { getData, updateData, addData, addNewColumn };
+
+const addNewCard = async (req, res) => {
+  try {
+    const body = req.body;
+    const result = await dataService.addNewCard(body);
+    res.status(201).json({
+      message: "New card added successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+module.exports = { getData, updateData, addData, addNewColumn ,addNewCard };

@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const { dataSchema } = require("../model");
 
 // Function to get all list
@@ -137,9 +138,36 @@ const addNewColumn = async (columnName) => {
   }
 };
 
+const addNewCard = async (body) => {
+  try {
+    const { status } = body;
+    const columnData = {
+      id: new mongoose.Types.ObjectId(),
+      title: body.title,
+      description: body.description,
+      dueDate: body.dueDate,
+    };
+    const dataDocument = await dataSchema.findOne();
+    if (!dataDocument) {
+      throw new Error("No data document found for adding new card.");
+    }
+    const column = dataDocument.data[status];
+    if (!column) {
+      throw new Error(`No column found with id "${status}".`);
+    }
+    column.push(columnData);
+    dataDocument.markModified(`data.${status}`);
+    await dataDocument.save();
+    return dataDocument.data[status];
+  } catch (error) {
+    throw new Error(`Error adding new card: ${error.message}`);
+  }
+};
+
 module.exports = {
   addData,
   getAllData,
   updateIndex,
   addNewColumn,
+  addNewCard,
 };
