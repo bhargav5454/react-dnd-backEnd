@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const { dataSchema } = require("../model");
-
+const { WebSocketServer } = require("ws");
+const wss = new WebSocketServer({ noServer: true });
 // Function to get all list
 
 const getAllData = async () => {
