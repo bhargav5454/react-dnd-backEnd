@@ -1,5 +1,4 @@
 const { dataService } = require("../services");
-const { broadcast } = require("../services/websocket");
 
 const getData = async (req, res) => {
   try {
@@ -24,7 +23,6 @@ const addData = async (req, res) => {
       newIndex
     );
 
-    broadcast({ type: "order_updated", item: result });
     res.status(201).json({
       message: "Data added successfully",
       data: result,
@@ -38,10 +36,7 @@ const updateData = async (req, res) => {
   try {
     const body = req.body;
     const updatedData = await dataService.updateIndex(body);
-    broadcast({
-      type: "reordered_updated",
-      item: { updatedData, status: body.status },
-    });
+
     return res.status(200).json({
       message: "Data reordered successfully",
       data: updatedData,
@@ -56,10 +51,7 @@ const addNewColumn = async (req, res) => {
   try {
     const body = req.body;
     const result = await dataService.addNewColumn(body.columnName);
-    broadcast({
-      type: "new_column",
-      item: { result, columnName: body.columnName },
-    });
+
     res.status(201).json({
       message: "New column added successfully",
       data: result,
@@ -73,7 +65,7 @@ const addNewCard = async (req, res) => {
   try {
     const body = req.body;
     const result = await dataService.addNewCard(body);
-    broadcast({ type: "order_updated", item: result });
+
     res.status(201).json({
       message: "New card added successfully",
       data: result,
