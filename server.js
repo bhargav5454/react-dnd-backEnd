@@ -6,15 +6,15 @@ const route = require("./routes");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const setupSocket = require("./socket/socket");
+const socket = require("./config/socket");
 
 const app = express();
 
 // Create HTTP server
-const server = createServer(app);
+const server = createServer(app); 
 
 // Initialize Socket.IO with CORS
-const io = new Server(server, { cors: { origin: "*" } });
-
+const io = socket.init(server)
 // CORS setup
 app.use(cors());
 

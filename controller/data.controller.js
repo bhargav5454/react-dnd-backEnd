@@ -1,3 +1,4 @@
+const socket = require("../config/socket");
 const { dataService } = require("../services");
 
 const getData = async (req, res) => {
@@ -22,7 +23,7 @@ const addData = async (req, res) => {
       body.itemId,
       newIndex
     );
-
+    socket.getIO().emit('users', { action: 'orderChange', data: result });
     res.status(201).json({
       message: "Data added successfully",
       data: result,
@@ -36,7 +37,7 @@ const updateData = async (req, res) => {
   try {
     const body = req.body;
     const updatedData = await dataService.updateIndex(body);
-
+    socket.getIO().emit('users', { action: 'orderChange', data: updatedData });
     return res.status(200).json({
       message: "Data reordered successfully",
       data: updatedData,
