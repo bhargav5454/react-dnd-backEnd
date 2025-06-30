@@ -7,7 +7,7 @@ const wss = new WebSocketServer({ noServer: true });
 const getAllData = async () => {
   try {
     const doc = await dataSchema.findOne();
-    return { data: doc.data };
+    return { data: doc };
   } catch (error) {
     console.error("Error fetching data:", error);
     return { success: false, message: "Failed to fetch data.", error };
